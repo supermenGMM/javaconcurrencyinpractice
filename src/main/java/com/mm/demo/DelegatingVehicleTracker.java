@@ -3,9 +3,7 @@ package com.mm.demo;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * 基于委托模式的机动车追踪器实现
@@ -60,6 +58,7 @@ public class DelegatingVehicleTracker {
 
 
     public static void main(String[] args) throws IllegalAccessException {
+
         Map<String, Point> map = new HashMap<String, Point>();
         map.put("1", new Point(11,22));
         DelegatingVehicleTracker tracker = new DelegatingVehicleTracker(map);
@@ -74,6 +73,7 @@ public class DelegatingVehicleTracker {
         tracker.setTracker("2", 33, 44);
 
         System.out.println(copyLocations.get("2"));
+
 
     }
 
