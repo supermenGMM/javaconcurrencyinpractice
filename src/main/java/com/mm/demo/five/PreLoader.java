@@ -14,11 +14,12 @@ public class PreLoader {
             new Callable<ProductInfo>() {
                 @Override
                 public ProductInfo call() throws Exception {
-                    return caculateProduct();
+                    return caculateProduct();//这里抛出的异常将会在get时抛出
                 }
 
                 private ProductInfo caculateProduct() throws DataLoadException {
                     ProductInfo productInfo = new ProductInfo();
+                    productInfo = null;
                     productInfo.name = "香蕉";
                     productInfo.num = 2;
                     if (productInfo == null) {
@@ -67,16 +68,19 @@ public class PreLoader {
             System.out.println(productInfo);
             return productInfo;
         } catch (ExecutionException e) {
+            System.out.println(e);
             Throwable cause = e.getCause();
             if (cause instanceof DataLoadException) {
                 throw (DataLoadException)cause;
             }else{
+                System.out.println("未知异常");
                 throw launderThrowable(cause);
             }
         }
     }
 
     private RuntimeException launderThrowable(Throwable cause) {
+        System.out.println("未知异常处理/");
         return (RuntimeException) cause;
     }
 
