@@ -1,5 +1,6 @@
 package com.mm.demo.five;
 
+import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -25,6 +26,9 @@ public class Indexer implements Runnable{
 
     //建立索引
     void indexFile(Object object) {
+
+        File file = (File) object;
+        System.out.println("拿到消费:"+file.getName());
         System.out.println("建立索引");
     }
 }

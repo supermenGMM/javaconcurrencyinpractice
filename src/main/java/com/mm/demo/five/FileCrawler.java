@@ -33,8 +33,7 @@ public class FileCrawler implements Runnable {
         if (files == null) {
             return;
         }
-        for (File file :
-                files) {
+        for (File file : files) {
             if (file.isDirectory()) {
                 crawl(file);
             }else {
