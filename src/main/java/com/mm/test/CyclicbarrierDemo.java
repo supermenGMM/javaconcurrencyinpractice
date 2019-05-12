@@ -27,28 +27,42 @@ public class CyclicbarrierDemo {
 
                 Thread.sleep(5000*num);
                 System.out.println("线程"+Thread.currentThread()+"执行完毕，等待其他线程执行。");
-//                cyclicBarrier.await();//等待其他线程运行到这里
-                cyclicBarrier.await(10, TimeUnit.MILLISECONDS);
-                System.out.println("线程"+Thread.currentThread()+"开始下面的执行");
+                cyclicBarrier.await();//等待其他线程运行到这里
+//                cyclicBarrier.await(10, TimeUnit.MILLISECONDS);//会抛出TimeoutException、BrokenBarrierException异常后继续执行
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
-
             } catch (BrokenBarrierException e) {
                 e.printStackTrace();
-            } catch (TimeoutException e) {
+            } /*catch (TimeoutException e) {
                 e.printStackTrace();
-            }
+            }*/
+            System.out.println("线程"+Thread.currentThread()+"执行完毕");
         }
     }
 
     @Test
     public void testCyclicBarrier() throws InterruptedException {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("等待成功。执行栅栏方法"+Thread.currentThread().getName());
+            }
+        });//等待线程达到栅栏，会有一个线程执行Runable
         for (int i = 0; i < 5; i++) {
             Writer writer = new Writer(cyclicBarrier,i);
             writer.start();
         }
-        Thread.sleep(10000);
+
+
+//栅栏是可重用的。但是countdownlatch不可以
+//        for (int i = 0; i < 5; i++) {
+//            Writer writer = new Writer(cyclicBarrier,i);
+//            writer.start();
+//        }
+        Thread.sleep(60000);
+
+
 
     }
 
