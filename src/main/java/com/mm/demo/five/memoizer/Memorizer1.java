@@ -4,7 +4,12 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 /**
- * 使用hashMap和同步机制来初始化缓存，
+ * 使用hashMap和同步机制来初始化缓存
+ *
+ * 加锁导致并发时，如果首次同时多个线程获取同一个key的value,
+ * 第一个线程获取锁之后，其他线程要等待执行结束才可以继续。
+ *
+ * 这个版本是书中的改进版，书中直接在方法上加锁，那会造成更多的性能问题。
  */
 public class Memorizer1<A,V> implements Computable<A,V>{
     private final Computable<A,V> computable;
@@ -19,6 +24,7 @@ public class Memorizer1<A,V> implements Computable<A,V>{
         V v = map.get(arg);
         if (v == null) {
             synchronized (this) {
+                v = map.get(arg);//如果这里不获取，并发时同一个arg，可能会执行两次下面的计算
                 if (v == null) {
                     System.out.println("第一次获取");
                     v = computable.comput(arg);
