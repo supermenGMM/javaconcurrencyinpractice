@@ -1,4 +1,4 @@
-package com.mm.demo.five.memoizer;
+package com.mm.demo.chapter5.memoizer;
 
 /**
  * 构建高效且可伸缩的结果缓存

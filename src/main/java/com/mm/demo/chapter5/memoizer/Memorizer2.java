@@ -1,4 +1,4 @@
-package com.mm.demo.five.memoizer;
+package com.mm.demo.chapter5.memoizer;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

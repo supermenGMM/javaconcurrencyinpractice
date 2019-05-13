@@ -1,8 +1,7 @@
-package com.mm.demo.five;
+package com.mm.demo.chapter5;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 

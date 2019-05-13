@@ -1,4 +1,4 @@
-package com.mm.demo.five.memoizer;
+package com.mm.demo.chapter5.memoizer;
 
 import java.math.BigInteger;
 
