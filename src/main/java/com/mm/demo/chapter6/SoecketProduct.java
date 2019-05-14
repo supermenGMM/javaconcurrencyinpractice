@@ -6,14 +6,15 @@ import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
 public class SoecketProduct {
+    private static final int count = 20;
     private static CountDownLatch startLatch =
-            new CountDownLatch(10);//启动门
+            new CountDownLatch(count);//启动门
     private static CountDownLatch endLatch =
-            new CountDownLatch(10);//结束门
+            new CountDownLatch(count);//结束门
 
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < count; i++) {
             final int num =i;
             new Thread() {
                 public void run() {
