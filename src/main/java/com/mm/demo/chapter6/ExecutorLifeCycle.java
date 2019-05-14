@@ -23,7 +23,8 @@ public class ExecutorLifeCycle {
         executorService.execute(new TaskRunable());
 
         executorService.shutdown();
-        System.out.println(executorService.isTerminated());
+        System.out.println("是否终止"+executorService.isTerminated());
+        System.out.println("是否shutdown:"+executorService.isShutdown());
         while (!executorService.isTerminated()) {
             System.out.println("继续等待");
         }

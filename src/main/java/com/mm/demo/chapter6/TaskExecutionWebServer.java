@@ -1,6 +1,8 @@
 package com.mm.demo.chapter6;
 
 
+import com.sun.corba.se.impl.orbutil.CorbaResourceUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -20,28 +22,36 @@ public class TaskExecutionWebServer {
             System.out.println("循环"+i);
             final Socket socket = serverSocket.accept();
             System.out.println("开始"+i);
-            EXECUTORS.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        handleRequest(socket);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            if (EXECUTORS.isShutdown()) {
+                EXECUTORS.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            handleRequest(socket);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }
             System.out.println("结束"+i++);
         }
     }
 
+    public static void stop() {
+        EXECUTORS.shutdown();
+    }
+
     private static void handleRequest(Socket socket) throws IOException {
-        InputStream inputStream = socket.getInputStream();
-        byte[] bytes = new byte[1024];
-        inputStream.read(bytes);
-        System.out.println(new String(bytes,"utf-8")+"====");
-
-
-        System.out.println("处理请求..."+Thread.currentThread().getName());
+        if (EXECUTORS.isShutdown()) {
+            System.out.println("已停止");
+        }else {
+            InputStream inputStream = socket.getInputStream();
+            byte[] bytes = new byte[1024];
+            inputStream.read(bytes);
+            System.out.println(new String(bytes,"utf-8")+"====");
+            System.out.println("处理请求..."+Thread.currentThread().getName());
+        }
     }
 
 }
