@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**1
  * 素数生成器，使用list作为存储
  * 练习：线程的取消
  * 通过一个volite字段设置开关

@@ -1,26 +1,22 @@
 package com.mm.demo.chapter7;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-/**2
+/**3
  * 通过队列实现终端，通过队列做存储。
  * 练习：线程的取消
- * 通过一个volite字段设置开关
- * 该场景有bug ：如果队列在生产者put值时，无法中断线程，
- * 因为取消执行后，可能不再消费，而任然在生产，生产时如果阻塞，
- * 是执行不到判断取消条件的代码的/
- *
+ * 通过interrput中断线程
  */
-public class PrimeGeneratorByQueue implements Runnable {
+public class PrimeGeneratorInterrput extends Thread {
     private final BlockingQueue<BigInteger> queue = new LinkedBlockingDeque<BigInteger>(10);//指定生产者容量
-    private volatile boolean cancel = false;
+    private boolean cancel = false;
+
     @Override
     public void run() {
         BigInteger bigInteger = BigInteger.ONE;
-        while (!cancel){
+        while (!Thread.currentThread().isInterrupted()&&!cancel) {
             bigInteger = bigInteger.nextProbablePrime();
             System.out.println("添加到数组" + bigInteger);
             try {
@@ -34,8 +30,9 @@ public class PrimeGeneratorByQueue implements Runnable {
     }
 
     public void cancel() {
-        System.out.println("取消");
         cancel = true;
+        interrupt();//如果线程阻塞，那么会抛出中断异常。但是如果没阻塞，就不能中断。所以非阻塞的中断目前还需要通过字段控制。
+        System.out.println("是否中断:" + Thread.currentThread().isInterrupted());
     }
 
     public BlockingQueue<BigInteger> get() {
@@ -44,11 +41,11 @@ public class PrimeGeneratorByQueue implements Runnable {
 
     /**
      * 生成素数一秒
+     *
      * @return
      */
-    public static BlockingQueue<BigInteger> aSecondOfPrimes() {
-        PrimeGeneratorByQueue primeGenerator = new PrimeGeneratorByQueue();
-        Thread thread = new Thread(primeGenerator);
+    public static void main(String[] args) {
+        PrimeGeneratorInterrput thread = new PrimeGeneratorInterrput();
         thread.start();
         try {
             Thread.sleep(1000);
@@ -56,16 +53,9 @@ public class PrimeGeneratorByQueue implements Runnable {
             e.printStackTrace();
             System.out.println("中断");
         } finally {
-            primeGenerator.cancel();
+            thread.cancel();
         }
-        return  primeGenerator.get();
-
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        BlockingQueue<BigInteger> queue = aSecondOfPrimes();
-        System.out.println(queue.size()+"长度");
-        //如果不执行下面的取出，线程就无法结束.执行了，上面的put就不再阻塞了。可以触发取消的判断
-        System.out.println("取出:"+queue.take());
-    }
+
 }
