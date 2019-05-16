@@ -29,7 +29,7 @@ public class FutureRender {
         Thread.sleep(2000);
         try {
             layout.renderingText(new ArrayList<String>());
-            layout.renderingImage(future.get());
+            layout.renderingImage(future.get(2,TimeUnit.SECONDS));
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -39,6 +39,10 @@ public class FutureRender {
         } catch (ExecutionException e) {
             e.printStackTrace();
             System.out.println("遇到未知异常处理----");
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            System.out.println("超时");
+            layout.renderingImage(null);//默认值
         }
     }
 
