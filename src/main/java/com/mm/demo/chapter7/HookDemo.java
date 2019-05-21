@@ -1,7 +1,8 @@
 package com.mm.demo.chapter7;
 
-import javax.crypto.MacSpi;
-
+/**
+ * jvm的钩子。当jvm关闭时，要先关闭钩子。所有可以在钩子中关闭资源
+ */
 public class HookDemo {
     static class MyTheard extends Thread{
 
