@@ -5,14 +5,15 @@ import java.util.concurrent.*;
 /**
  * 线程池的创建和销毁，已经各个配置的修改
  * 测试结果：
- * 有界线程池，有界队列，当线程满后不会再创建新的线程。如果队列满了，则任务被抛弃。（默认饱和策略为absortPolicy）
+ *1. 有界线程池，有界队列，当线程满后不会再创建新的线程。如果队列满了，则任务被抛弃。（默认饱和策略为absortPolicy）
+ *2.无界线程池，有界队列，则可无界的创建新的线程。？那队列还有什么用？
  *
  */
 public class ThreadCreateAndDestory {
 
     public static void main(String[] args) {
         ThreadPoolExecutor executorService = new ThreadPoolExecutor(2,
-                3,5, TimeUnit.SECONDS,
+                Integer.MAX_VALUE,5, TimeUnit.SECONDS,
                new ArrayBlockingQueue<Runnable>(2));
 
         //设置饱和策略
