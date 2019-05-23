@@ -1,5 +1,7 @@
 package com.mm.demo.chapter7;
 
+import org.junit.Test;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -27,5 +29,14 @@ public class FutureTaskCancelDemo {
 
         System.out.println(futureTask.get());
 
+    }
+
+    /**
+     * 线程池的数量
+     */
+    @Test
+    public void test() {
+        int i = Runtime.getRuntime().availableProcessors();
+        System.out.println("cpu的数量为:"+i);
     }
 }
