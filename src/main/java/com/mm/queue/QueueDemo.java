@@ -38,12 +38,17 @@ public class QueueDemo {
             try {
                 System.out.println("开始-" + val);
                 queue.put(val);
+                System.out.println("结束 -"+val);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * 测试ArrayLinkQueue使用公平和非公平锁的区别
+     * @throws InterruptedException
+     */
     @Test
     public void test() throws InterruptedException {
         List<Productor> list = new ArrayList<Productor>();
@@ -53,6 +58,9 @@ public class QueueDemo {
         for (int i = 0; i < 10; i++) {
             list.get(i).start();
         }
+
+        //输出
+        Thread.sleep(4000);
         for (int i = 0; i < 10; i++) {
             System.out.println("输出的顺序"+queue.take());
         }
