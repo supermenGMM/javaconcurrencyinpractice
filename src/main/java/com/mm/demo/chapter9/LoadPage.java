@@ -1,5 +1,7 @@
 package com.mm.demo.chapter9;
 
+import org.junit.Test;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +10,10 @@ import java.util.concurrent.*;
 public class LoadPage {
     ExecutorService executor = Executors.newFixedThreadPool(10);
 
-    void onCreate() {
+    @Test
+    public void onCreate() throws InterruptedException {
         Button button = new Button();
+        Button cancel = new Button();
         final BackgroundTask<Integer> backgroundTask = new BackgroundTask<Integer>() {
             @Override
             protected void onComplete(Integer integer, Throwable throwable, boolean isCancel) {
@@ -18,6 +22,7 @@ public class LoadPage {
                     System.out.println("提示用户异常。需要重试");
                 }
                 if (isCancel) {
+                    System.out.println("任务已取消");
                     return;
                 } else {
                     System.out.println("使用数据:" + integer + "渲染页面");
@@ -33,6 +38,10 @@ public class LoadPage {
             protected Integer compute() {
                 System.out.println("处理任务....步骤一");
                 setProcess(1, 3);
+//                if (true) {  //演示抛异常的情况
+//                    throw new IllegalArgumentException();
+//                }
+
                 System.out.println("处理任务....步骤二");
                 setProcess(2, 3);
                 System.out.println("处理任务....步骤三");
@@ -53,11 +62,26 @@ public class LoadPage {
                 compute();
             }
         };
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executor.submit(backgroundTask.computation);
-            }
-        });
+
+       executor.submit(backgroundTask.computation);
+//        Thread.sleep(1);
+        backgroundTask.computation.cancel(false);
+
+        Thread.sleep(1000);
+//        final Future<?> submit = null;
+//        button.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                executor.submit(backgroundTask.computation);
+//            }
+//        });
+//        cancel.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (submit != null&&!submit.isCancelled()) {
+//                    submit.cancel(true);
+//                }
+//            }
+//        });
     }
 }
